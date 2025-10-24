@@ -54,9 +54,6 @@ with st.sidebar.expander("ℹ️ Tentang Aplikasi", expanded=True):
     Aplikasi ini menggunakan kombinasi **deteksi objek** dan **klasifikasi citra**  
     untuk menghasilkan hasil deteksi yang cepat dan akurat.
 
-    ---
-    Pilih mode, unggah gambar, dan lihat hasil deteksinya secara real-time! 🚀
-    """)
 
 # =====================================================
 # 🎥 SIDEBAR - VIDEO TUTORIAL
@@ -198,11 +195,9 @@ def detect_objects(img, conf_threshold=0.3):
         cls = int(box.cls)
         label = results[0].names[cls]
 
-        # Hitung rasio tinggi/lebar kotak
         width = box.xywh[0][2]
         height = box.xywh[0][3]
 
-        # Hanya terima manusia yang tinggi > lebar (vertical)
         if conf >= conf_threshold and label in valid_labels and height/width > 1.2:
             detected_objects.append({
                 "label": label,
@@ -219,30 +214,25 @@ def classify_image(img):
     try:
         img = img.convert("RGB")
 
-        # 🧩 Preprocessing adaptif biar hasil stabil di semua kondisi
         img = ImageOps.autocontrast(img, cutoff=2)
         img = img.filter(ImageFilter.SMOOTH_MORE)
 
-        # Penyesuaian brightness & kontras ringan
         enhancer_b = ImageEnhance.Brightness(img)
-        img = enhancer_b.enhance(0.9)  # bisa dicoba 0.8–1.2
+        img = enhancer_b.enhance(0.9) 
 
         enhancer_c = ImageEnhance.Contrast(img)
-        img = enhancer_c.enhance(1.2)  # bisa dicoba 1.0–1.3
+        img = enhancer_c.enhance(1.2)  
 
-        # Resize ke ukuran input model
         input_shape = classifier.input_shape[1:3]
         img_resized = img.resize(input_shape)
         img_array = image.img_to_array(img_resized)
         img_array = np.expand_dims(img_array, axis=0) / 255.0
 
-        # Prediksi
         prediction = classifier.predict(img_array, verbose=0)
         class_index = np.argmax(prediction)
         confidence = np.max(prediction)
         class_name = class_labels[class_index]
 
-        # 🔄 Fallback: kalau confidence rendah, coba grayscale ulang
         if confidence < 0.55:
             gray = img.convert("L").convert("RGB")
             gray_resized = gray.resize(input_shape)
@@ -256,7 +246,6 @@ def classify_image(img):
             if re_conf > confidence:
                 class_name, confidence = re_class, re_conf
 
-        # Filter akhir
         if confidence < 0.45:
             return "Bukan alas kaki", round(confidence * 100, 2)
 
@@ -321,7 +310,7 @@ if menu == "🧍 Deteksi Gender (YOLO)":
 
     if uploaded_file:
         img = Image.open(uploaded_file)
-        st.image(img, caption="Gambar yang Diupload", use_container_width=1000)
+        st.image(img, caption="Gambar yang Diupload", use_container_width=True)
 
         # Cek domain: harus manusia
         if not contains_human(img, conf_threshold):
@@ -332,7 +321,7 @@ if menu == "🧍 Deteksi Gender (YOLO)":
                 annotated_img, detections = detect_objects(img, conf_threshold)
                 duration = time.time() - start_time
 
-            st.image(annotated_img, caption="Hasil Deteksi", use_container_width=1000)
+            st.image(annotated_img, caption="Hasil Deteksi", use_container_width=True)
             st.caption(f"⏱ Waktu Proses: {duration:.2f} detik")
 
             gender_detected = detections[0]["label"]
@@ -377,7 +366,6 @@ elif menu == "👞 Klasifikasi Alas Kaki (CNN)":
         img = Image.open(uploaded_file)
         st.image(img, caption="Gambar yang Diupload", use_container_width=True)
 
-        # Cek domain: jangan ada manusia
         if contains_human(img, conf_threshold):
             st.error("🚫 Gambar mengandung manusia! Klasifikasi alas kaki dibatalkan.")
         else:
@@ -435,11 +423,11 @@ if show_chart and len(st.session_state.history) > 0:
         colors = ["#FFB74D", "#FF8A65", "#F06292"]
     elif theme == "🌙 Dark":
         colors = ["#90CAF9", "#F48FB1", "#CE93D8"]
-    else:  # Default
+    else:  
         colors = ["#64B5F6", "#4FC3F7", "#81D4FA"]
 
     # Buat plot
-    fig, ax = plt.subplots(figsize=(6, 4))  # ukuran lebih kecil
+    fig, ax = plt.subplots(figsize=(6, 4))  
 counts.plot(kind="bar", color=colors, ax=ax)
 
 ax.set_xlabel("Kategori Deteksi", fontsize=10)
@@ -447,7 +435,7 @@ ax.set_ylabel("Jumlah", fontsize=10)
 ax.set_title("Statistik Deteksi (Gender & Alas Kaki)", fontsize=12, weight='bold')
 ax.grid(axis="y", linestyle="--", alpha=0.4)
 
-fig.tight_layout()  # supaya layout rapi
+fig.tight_layout()
 st.pyplot(fig)
 
 
