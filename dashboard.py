@@ -179,20 +179,21 @@ def detect_objects(img, conf_threshold=0.3):
     valid_labels = ["Men", "Women"]
 
     for box in results[0].boxes:
-    conf = float(box.conf)
-    cls = int(box.cls)
-    label = results[0].names[cls]
+        conf = float(box.conf)
+        cls = int(box.cls)
+        label = results[0].names[cls]
 
-    # Hitung rasio tinggi/lebar kotak
-    width = box.xywh[0][2]
-    height = box.xywh[0][3]
+        # Hitung rasio tinggi/lebar kotak
+        width = box.xywh[0][2]
+        height = box.xywh[0][3]
 
-    # Hanya terima manusia yang tinggi > lebar (vertical)
-    if conf >= conf_threshold and label in valid_labels and height/width > 1.2:
-        detected_objects.append({
-            "label": label,
-            "confidence": round(conf * 100, 2)
-        })
+        # Hanya terima manusia yang tinggi > lebar (vertical)
+        if conf >= conf_threshold and label in valid_labels and height/width > 1.2:
+            detected_objects.append({
+                "label": label,
+                "confidence": round(conf * 100, 2)
+            })
+
     return annotated_img, detected_objects
 
 # =====================================================
