@@ -179,14 +179,20 @@ def detect_objects(img, conf_threshold=0.3):
     valid_labels = ["Men", "Women"]
 
     for box in results[0].boxes:
-        conf = float(box.conf)
-        cls = int(box.cls)
-        label = results[0].names[cls]
-        if conf >= conf_threshold:
-            detected_objects.append({
-                "label": label if label in valid_labels else "Objek tidak sesuai domain gender",
-                "confidence": round(conf * 100, 2)
-            })
+    conf = float(box.conf)
+    cls = int(box.cls)
+    label = results[0].names[cls]
+
+    # Hitung rasio tinggi/lebar kotak
+    width = box.xywh[0][2]
+    height = box.xywh[0][3]
+
+    # Hanya terima manusia yang tinggi > lebar (vertical)
+    if conf >= conf_threshold and label in valid_labels and height/width > 1.2:
+        detected_objects.append({
+            "label": label,
+            "confidence": round(conf * 100, 2)
+        })
     return annotated_img, detected_objects
 
 # =====================================================
@@ -248,7 +254,7 @@ def classify_image(img):
 # SIDEBAR
 # =====================================================
 menu = st.sidebar.radio("Pilih Mode:", ["🧍 Deteksi Gender (YOLO)", "👞 Klasifikasi Alas Kaki (CNN)"])
-conf_threshold = st.sidebar.slider("Confidence Threshold (YOLO)", 0.1, 1.0, 0.3, 0.05)
+conf_threshold = st.sidebar.slider("Confidence Threshold (YOLO)", 0.1, 1.0, 0.5, 0.05)
 
 st.sidebar.markdown("### ⚙️ Fitur Opsional")
 export_enable = st.sidebar.checkbox("💾 Simpan Riwayat ke CSV", value=True)
