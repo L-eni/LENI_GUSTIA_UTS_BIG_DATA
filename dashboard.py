@@ -300,7 +300,7 @@ def likely_footwear(img, threshold=0.45):
 # =====================================================
 # MODE: YOLO (Deteksi Gender)
 # =====================================================
-if menu == "🧍 Deteksi Gender (YOLO)":
+if menu == "🧍 Deteksi Gender":
     st.subheader("🧍 Deteksi Gender (Men/Women)")
 
     if uploaded_file:
