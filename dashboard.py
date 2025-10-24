@@ -332,7 +332,7 @@ if menu == "🧍 Deteksi Gender (YOLO)":
                 annotated_img, detections = detect_objects(img, conf_threshold)
                 duration = time.time() - start_time
 
-            st.image(annotated_img, caption="Hasil Deteksi", use_container_width=True)
+            st.image(annotated_img, caption="Hasil Deteksi", use_container_width=600)
             st.caption(f"⏱ Waktu Proses: {duration:.2f} detik")
 
             gender_detected = detections[0]["label"]
