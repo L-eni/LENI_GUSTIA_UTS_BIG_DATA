@@ -321,7 +321,7 @@ if menu == "🧍 Deteksi Gender (YOLO)":
 
     if uploaded_file:
         img = Image.open(uploaded_file)
-        st.image(img, caption="Gambar yang Diupload", use_container_width=True)
+        st.image(img, caption="Gambar yang Diupload", use_container_width=1000)
 
         # Cek domain: harus manusia
         if not contains_human(img, conf_threshold):
@@ -332,7 +332,7 @@ if menu == "🧍 Deteksi Gender (YOLO)":
                 annotated_img, detections = detect_objects(img, conf_threshold)
                 duration = time.time() - start_time
 
-            st.image(annotated_img, caption="Hasil Deteksi", use_container_width=600)
+            st.image(annotated_img, caption="Hasil Deteksi", use_container_width=1000)
             st.caption(f"⏱ Waktu Proses: {duration:.2f} detik")
 
             gender_detected = detections[0]["label"]
