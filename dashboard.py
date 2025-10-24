@@ -284,6 +284,13 @@ def contains_human(img, conf_threshold=0.5):
     _, detections = detect_objects(img, conf_threshold)
     return any(d["label"] in ["Men", "Women"] for d in detections)
 
+def likely_footwear(img, threshold=0.45):
+    """
+    Mengembalikan True jika CNN kemungkinan besar mengenali alas kaki.
+    """
+    class_name, confidence = classify_image(img)
+    return confidence >= threshold and class_name != "Bukan alas kaki"
+
 # =====================================================
 # MODE: YOLO (Deteksi Gender)
 # =====================================================
@@ -294,43 +301,30 @@ if menu == "🧍 Deteksi Gender (YOLO)":
         img = Image.open(uploaded_file)
         st.image(img, caption="Gambar yang Diupload", use_container_width=True)
 
-        with st.spinner("🔎 Mendeteksi gender..."):
-            start_time = time.time()
-            annotated_img, detections = detect_objects(img, conf_threshold)
-            duration = time.time() - start_time
+        # Cek domain: harus manusia
+        if not contains_human(img, conf_threshold):
+            st.warning("⚠ Gambar bukan manusia! Mode Gender tidak dijalankan.")
+        else:
+            with st.spinner("🔎 Mendeteksi gender..."):
+                start_time = time.time()
+                annotated_img, detections = detect_objects(img, conf_threshold)
+                duration = time.time() - start_time
 
-        st.image(annotated_img, caption="Hasil Deteksi", use_container_width=True)
-        st.caption(f"⏱ Waktu Proses: {duration:.2f} detik")
+            st.image(annotated_img, caption="Hasil Deteksi", use_container_width=True)
+            st.caption(f"⏱ Waktu Proses: {duration:.2f} detik")
 
-        human_detected = any(d["label"] in ["Men", "Women"] for d in detections)
-
-        if human_detected:
             gender_detected = detections[0]["label"]
             st.session_state.detections["gender"] += 1
             st.session_state.history.append({"Tipe": "Gender", "Hasil": gender_detected})
 
             if gender_detected == "Men":
                 st.markdown("### 🧴 Rekomendasi untuk Pria")
-                st.info("""
-                - Gunakan *moisturizer* harian untuk menjaga kelembapan kulit.  
-                - Pilihan outfit kasual: **kemeja polos + jeans slim fit**.  
-                - Produk rekomendasi utama: **Face Wash Men Deep Clean - Rp 35.000**
-                """)
+                st.info("- Gunakan moisturizer harian ...")
             elif gender_detected == "Women":
                 st.markdown("### 💅 Rekomendasi untuk Wanita")
-                st.info("""
-                - Gunakan *sunscreen* setiap hari (minimal SPF 30+) untuk melindungi kulit dari UV.  
-                - Coba gaya kasual dengan **floral dress** dan aksesori minimalis.  
-                - Produk rekomendasi utama: **Serum Vitamin C Bright - Rp 50.000**
-                """)
-        else:
-            st.warning("⚠ Tidak ada manusia terdeteksi dalam gambar.")
-    else:
-        st.info("📤 Silakan unggah gambar atau gunakan kamera.")
+                st.info("- Gunakan sunscreen ...")
 
-# =====================================================
-# MODE: CNN (Klasifikasi Alas Kaki)
-# =====================================================
+
 # =====================================================
 # MODE: CNN (Klasifikasi Alas Kaki)
 # =====================================================
@@ -341,12 +335,11 @@ elif menu == "👞 Klasifikasi Alas Kaki (CNN)":
         img = Image.open(uploaded_file)
         st.image(img, caption="Gambar yang Diupload", use_container_width=True)
 
-        with st.spinner("🔎 Mengecek apakah gambar mengandung manusia..."):
-            human_detected = contains_human(img, conf_threshold=conf_threshold)
-
-        if human_detected:
-            st.error("🚫 Gambar mengandung manusia! Klasifikasi alas kaki tidak dijalankan.")
+        # Cek domain: jangan ada manusia
+        if contains_human(img, conf_threshold):
+            st.error("🚫 Gambar mengandung manusia! Klasifikasi alas kaki dibatalkan.")
         else:
+            # Jalankan CNN normal
             with st.spinner("🧠 Mengklasifikasikan alas kaki..."):
                 start_time = time.time()
                 class_name, confidence = classify_image(img)
@@ -359,22 +352,7 @@ elif menu == "👞 Klasifikasi Alas Kaki (CNN)":
             else:
                 st.session_state.detections["footwear"] += 1
                 st.session_state.history.append({"Tipe": "Alas Kaki", "Hasil": class_name})
-
                 st.success(f"✅ Jenis Alas Kaki: *{class_name}* ({confidence}%)")
-                st.markdown("### 🛍️ Rekomendasi Produk Serupa:")
-
-                if class_name == "Sandal":
-                    st.write("- [Sandal Kulit Premium - Rp 189.000](https://tokopedia.com)")
-                    st.write("- [Sandal Gunung Anti Slip - Rp 220.000](https://shopee.co.id)")
-                elif class_name == "Shoe":
-                    st.write("- [Sneakers Sporty X - Rp 350.000](https://tokopedia.com)")
-                    st.write("- [Sepatu Formal Pria - Rp 420.000](https://shopee.co.id)")
-                elif class_name == "Boot":
-                    st.write("- [Boot Kulit Asli - Rp 490.000](https://tokopedia.com)")
-                    st.write("- [Boot Safety Outdoor - Rp 520.000](https://shopee.co.id)")
-    else:
-        st.info("📤 Silakan unggah gambar atau gunakan kamera.")
-
 
 # =====================================================
 # STATISTIK & EKSPOR (KUSTOM WARNA)
