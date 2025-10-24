@@ -53,7 +53,7 @@ with st.sidebar.expander("ℹ️ Tentang Aplikasi", expanded=True):
     ### 🧠 Tentang Teknologi
     Aplikasi ini menggunakan kombinasi **deteksi objek** dan **klasifikasi citra**  
     untuk menghasilkan hasil deteksi yang cepat dan akurat.
-
+    """)
 
 # =====================================================
 # 🎥 SIDEBAR - VIDEO TUTORIAL
