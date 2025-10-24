@@ -48,11 +48,6 @@ with st.sidebar.expander("ℹ️ Tentang Aplikasi", expanded=True):
     - 👞 **Klasifikasi Alas Kaki** → Boot / Sandal / Sepatu  
     - 💾 **Simpan Riwayat ke CSV** → untuk dokumentasi hasil deteksi  
     - 📊 **Tampilkan Statistik Visual** → grafik hasil prediksi  
-
-    ---
-    ### 🧠 Tentang Teknologi
-    Aplikasi ini menggunakan kombinasi **deteksi objek** dan **klasifikasi citra**  
-    untuk menghasilkan hasil deteksi yang cepat dan akurat.
     """)
 
 # =====================================================
@@ -258,8 +253,8 @@ def classify_image(img):
 # =====================================================
 # SIDEBAR
 # =====================================================
-menu = st.sidebar.radio("Pilih Mode:", ["🧍 Deteksi Gender (YOLO)", "👞 Klasifikasi Alas Kaki (CNN)"])
-conf_threshold = st.sidebar.slider("Confidence Threshold (YOLO)", 0.1, 1.0, 0.5, 0.05)
+menu = st.sidebar.radio("Pilih Mode:", ["🧍 Deteksi Gender", "👞 Klasifikasi Alas Kaki"])
+conf_threshold = st.sidebar.slider("Confidence Threshold", 0.1, 1.0, 0.5, 0.05)
 
 st.sidebar.markdown("### ⚙️ Fitur Opsional")
 export_enable = st.sidebar.checkbox("💾 Simpan Riwayat ke CSV", value=True)
@@ -359,7 +354,7 @@ if menu == "🧍 Deteksi Gender (YOLO)":
 # =====================================================
 # MODE: CNN (Klasifikasi Alas Kaki)
 # =====================================================
-elif menu == "👞 Klasifikasi Alas Kaki (CNN)":
+elif menu == "👞 Klasifikasi Alas Kaki":
     st.subheader("👞 Klasifikasi Alas Kaki (Boot/Sandal/Shoe)")
 
     if uploaded_file:
