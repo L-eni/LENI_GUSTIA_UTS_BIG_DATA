@@ -346,36 +346,33 @@ elif menu == "👞 Klasifikasi Alas Kaki (CNN)":
         img = Image.open(uploaded_file)
         st.image(img, caption="Gambar yang Diupload", use_container_width=True)
 
-        annotated_img, detections = detect_objects(img, conf_threshold)
-        contains_human = any(d["label"] in ["Men", "Women"] for d in detections)
+        # ⚡ Hanya CNN yang bekerja — YOLO tidak dijalankan di mode ini
+        with st.spinner("🧠 Mengklasifikasikan..."):
+            start_time = time.time()
+            class_name, confidence = classify_image(img)
+            duration = time.time() - start_time
 
-        if contains_human:
-            st.error("🚫 Gambar mengandung manusia, bukan domain alas kaki.")
+        st.caption(f"⏱ Waktu Proses: {duration:.2f} detik")
+
+        # 🔍 Tampilkan hasil CNN
+        if class_name == "Bukan alas kaki":
+            st.warning("⚠ Gambar tidak dikenali sebagai alas kaki.")
         else:
-            with st.spinner("🧠 Mengklasifikasikan..."):
-                start_time = time.time()
-                class_name, confidence = classify_image(img)
-                duration = time.time() - start_time
+            st.session_state.detections["footwear"] += 1
+            st.session_state.history.append({"Tipe": "Alas Kaki", "Hasil": class_name})
 
-            st.caption(f"⏱ Waktu Proses: {duration:.2f} detik")
+            st.success(f"✅ Jenis Alas Kaki: *{class_name}* ({confidence}%)")
+            st.markdown("### 🛍️ Rekomendasi Produk Serupa:")
 
-            if class_name == "Bukan alas kaki":
-                st.warning("⚠ Gambar tidak dikenali sebagai alas kaki.")
-            else:
-                st.session_state.detections["footwear"] += 1
-                st.session_state.history.append({"Tipe": "Alas Kaki", "Hasil": class_name})
-
-                st.success(f"✅ Jenis Alas Kaki: *{class_name}* ({confidence}%)")
-                st.markdown("### 🛍️ Rekomendasi Produk Serupa:")
-                if class_name == "Sandal":
-                    st.write("- [Sandal Kulit Premium - Rp 189.000](https://tokopedia.com)")
-                    st.write("- [Sandal Gunung Anti Slip - Rp 220.000](https://shopee.co.id)")
-                elif class_name == "Shoe":
-                    st.write("- [Sneakers Sporty X - Rp 350.000](https://tokopedia.com)")
-                    st.write("- [Sepatu Formal Pria - Rp 420.000](https://shopee.co.id)")
-                elif class_name == "Boot":
-                    st.write("- [Boot Kulit Asli - Rp 490.000](https://tokopedia.com)")
-                    st.write("- [Boot Safety Outdoor - Rp 520.000](https://shopee.co.id)")
+            if class_name == "Sandal":
+                st.write("- [Sandal Kulit Premium - Rp 189.000](https://tokopedia.com)")
+                st.write("- [Sandal Gunung Anti Slip - Rp 220.000](https://shopee.co.id)")
+            elif class_name == "Shoe":
+                st.write("- [Sneakers Sporty X - Rp 350.000](https://tokopedia.com)")
+                st.write("- [Sepatu Formal Pria - Rp 420.000](https://shopee.co.id)")
+            elif class_name == "Boot":
+                st.write("- [Boot Kulit Asli - Rp 490.000](https://tokopedia.com)")
+                st.write("- [Boot Safety Outdoor - Rp 520.000](https://shopee.co.id)")
     else:
         st.info("📤 Silakan unggah gambar atau gunakan kamera.")
 
