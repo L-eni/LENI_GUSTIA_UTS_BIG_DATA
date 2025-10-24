@@ -16,12 +16,12 @@ from PIL import ImageEnhance, ImageOps, ImageFilter
 # KONFIGURASI HALAMAN
 # =====================================================
 st.set_page_config(
-    page_title="🧍👟 Gender & Footwear AI Detection",
+    page_title="🧍👟 StyleAnalyzer",
     layout="wide",
     page_icon="🧍👟"
 )
 
-st.title("👟 Gender & Footwear Recognition App")
+st.title("🧍👟 StyleAnalyzer App")
 st.markdown("""
 Temukan kecocokan gaya kamu! Aplikasi ini bisa mengenali gender dan jenis alas kaki secara otomatis hanya dari satu gambar  
 """)
@@ -31,7 +31,7 @@ Temukan kecocokan gaya kamu! Aplikasi ini bisa mengenali gender dan jenis alas k
 # =====================================================
 with st.sidebar.expander("ℹ️ Tentang Aplikasi", expanded=True):
     st.markdown("""
-    ## 👟 Gender & Footwear Recognition App  
+    ## 🧍👟 StyleAnalyzer App  
     Aplikasi ini dibuat untuk mengenali **jenis kelamin (gender) dengan model YOLO** dan 
     **jenis alas kaki (footwear) dengan model CNN** dari gambar atau tangkapan kamera secara otomatis.
 
