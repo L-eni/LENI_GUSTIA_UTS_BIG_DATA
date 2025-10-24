@@ -10,6 +10,7 @@ from PIL import Image
 import time
 import os
 import pandas as pd
+from PIL import ImageEnhance, ImageOps, ImageFilter
 
 # =====================================================
 # KONFIGURASI HALAMAN
@@ -58,9 +59,7 @@ with st.sidebar.expander("ℹ️ Tentang Aplikasi", expanded=True):
     """)
 
     
-# =====================================================
-# 🌈 PILIHAN TEMA WARNA (MULTI THEME)
-# =====================================================
+
 # =====================================================
 # 🌈 PILIHAN TEMA WARNA (PASTEL STYLE)
 # =====================================================
@@ -194,23 +193,55 @@ def detect_objects(img, conf_threshold=0.3):
 
 # =====================================================
 # KLASIFIKASI ALAS KAKI (CNN)
-# =====================================================
+# ====================================================
+
 def classify_image(img):
     try:
         img = img.convert("RGB")
+
+        # 🧩 Preprocessing adaptif biar hasil stabil di semua kondisi
+        img = ImageOps.autocontrast(img, cutoff=2)
+        img = img.filter(ImageFilter.SMOOTH_MORE)
+
+        # Penyesuaian brightness & kontras ringan
+        enhancer_b = ImageEnhance.Brightness(img)
+        img = enhancer_b.enhance(0.9)  # bisa dicoba 0.8–1.2
+
+        enhancer_c = ImageEnhance.Contrast(img)
+        img = enhancer_c.enhance(1.2)  # bisa dicoba 1.0–1.3
+
+        # Resize ke ukuran input model
         input_shape = classifier.input_shape[1:3]
         img_resized = img.resize(input_shape)
         img_array = image.img_to_array(img_resized)
         img_array = np.expand_dims(img_array, axis=0) / 255.0
 
+        # Prediksi
         prediction = classifier.predict(img_array, verbose=0)
         class_index = np.argmax(prediction)
         confidence = np.max(prediction)
         class_name = class_labels[class_index]
 
-        if confidence < 0.6:
+        # 🔄 Fallback: kalau confidence rendah, coba grayscale ulang
+        if confidence < 0.55:
+            gray = img.convert("L").convert("RGB")
+            gray_resized = gray.resize(input_shape)
+            gray_array = image.img_to_array(gray_resized)
+            gray_array = np.expand_dims(gray_array, axis=0) / 255.0
+
+            re_pred = classifier.predict(gray_array, verbose=0)
+            re_conf = np.max(re_pred)
+            re_class = class_labels[np.argmax(re_pred)]
+
+            if re_conf > confidence:
+                class_name, confidence = re_class, re_conf
+
+        # Filter akhir
+        if confidence < 0.45:
             return "Bukan alas kaki", round(confidence * 100, 2)
+
         return class_name, round(confidence * 100, 2)
+
     except Exception as e:
         st.error(f"⚠ Error klasifikasi: {e}")
         return "Bukan alas kaki", 0
