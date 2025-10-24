@@ -16,14 +16,14 @@ from PIL import ImageEnhance, ImageOps, ImageFilter
 # KONFIGURASI HALAMAN
 # =====================================================
 st.set_page_config(
-    page_title="👟 Gender & Footwear AI Detection",
+    page_title="🧍👟 Gender & Footwear AI Detection",
     layout="wide",
-    page_icon="👟"
+    page_icon="🧍👟"
 )
 
 st.title("👟 Gender & Footwear Recognition App")
 st.markdown("""
-Temukan kecocokan gaya kamu! 👟 Aplikasi ini bisa mengenali gender dan jenis alas kaki secara otomatis hanya dari satu gambar  
+Temukan kecocokan gaya kamu! Aplikasi ini bisa mengenali gender dan jenis alas kaki secara otomatis hanya dari satu gambar  
 """)
 
 # =====================================================
