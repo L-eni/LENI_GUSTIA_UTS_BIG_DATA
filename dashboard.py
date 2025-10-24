@@ -311,6 +311,7 @@ if menu == "🧍 Deteksi Gender (YOLO)":
             st.session_state.detections["gender"] += 1
             st.session_state.history.append({"Tipe": "Gender", "Hasil": gender_detected})
 
+            # 🔹 Rekomendasi berdasarkan gender
             if gender_detected == "Men":
                 st.markdown("### 🧴 Rekomendasi untuk Pria")
                 st.info("""
@@ -318,6 +319,13 @@ if menu == "🧍 Deteksi Gender (YOLO)":
                 - Pilihan outfit kasual: **kemeja polos + jeans slim fit**.  
                 - Produk rekomendasi utama: **Face Wash Men Deep Clean - Rp 35.000**
                 """)
+                st.markdown("#### 🛒 Belanja Sekarang:")
+                st.write("- [🛍️ Face Wash Men Deep Clean (Shopee)](https://shopee.co.id/search?keyword=face%20wash%20men%20deep%20clean)")
+                st.write("- [🧴 Moisturizer Men (Shopee)](https://shopee.co.id/search?keyword=moisturizer%20men)")
+                st.write("- [👕 Kemeja Polos Pria (Shopee)](https://shopee.co.id/search?keyword=kemeja%20polos%20pria)")
+                st.write("- [👟 Sepatu Kasual Pria (Shopee)](https://shopee.co.id/search?keyword=sepatu%20kasual%20pria)")
+                st.write("- [⌚ Jam Tangan Sporty (Shopee)](https://shopee.co.id/search?keyword=jam%20tangan%20pria)")
+
             elif gender_detected == "Women":
                 st.markdown("### 💅 Rekomendasi untuk Wanita")
                 st.info("""
@@ -325,6 +333,12 @@ if menu == "🧍 Deteksi Gender (YOLO)":
                 - Coba gaya kasual dengan **floral dress** dan aksesori minimalis.  
                 - Produk rekomendasi utama: **Serum Vitamin C Bright - Rp 50.000**
                 """)
+                st.markdown("#### 🛒 Belanja Sekarang:")
+                st.write("- [☀️ Sunscreen SPF 30+ (Shopee)](https://shopee.co.id/search?keyword=sunscreen%20spf%2030)")
+                st.write("- [🌸 Floral Dress Casual (Shopee)](https://shopee.co.id/search?keyword=floral%20dress)")
+                st.write("- [💧 Serum Vitamin C Bright (Shopee)](https://shopee.co.id/search?keyword=serum%20vitamin%20c%20bright)")
+                st.write("- [👜 Tas Fashion Wanita (Shopee)](https://shopee.co.id/search?keyword=tas%20wanita)")
+                st.write("- [👠 High Heels Elegant (Shopee)](https://shopee.co.id/search?keyword=high%20heels%20elegant)")
         else:
             st.warning("⚠ Tidak ada manusia terdeteksi dalam gambar.")
     else:
