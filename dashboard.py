@@ -58,8 +58,6 @@ with st.sidebar.expander("ℹ️ Tentang Aplikasi", expanded=True):
     Pilih mode, unggah gambar, dan lihat hasil deteksinya secara real-time! 🚀
     """)
 
-    
-
 # =====================================================
 # 🌈 PILIHAN TEMA WARNA (PASTEL STYLE)
 # =====================================================
@@ -333,6 +331,9 @@ if menu == "🧍 Deteksi Gender (YOLO)":
 # =====================================================
 # MODE: CNN (Klasifikasi Alas Kaki)
 # =====================================================
+# =====================================================
+# MODE: CNN (Klasifikasi Alas Kaki)
+# =====================================================
 elif menu == "👞 Klasifikasi Alas Kaki (CNN)":
     st.subheader("👞 Klasifikasi Alas Kaki (Boot/Sandal/Shoe)")
 
@@ -341,36 +342,39 @@ elif menu == "👞 Klasifikasi Alas Kaki (CNN)":
         st.image(img, caption="Gambar yang Diupload", use_container_width=True)
 
         with st.spinner("🔎 Mengecek apakah gambar mengandung manusia..."):
-            if contains_human(img):
-                st.error("🚫 Gambar mengandung manusia, klasifikasi alas kaki tidak dijalankan.")
+            human_detected = contains_human(img, conf_threshold=conf_threshold)
+
+        if human_detected:
+            st.error("🚫 Gambar mengandung manusia! Klasifikasi alas kaki tidak dijalankan.")
+        else:
+            with st.spinner("🧠 Mengklasifikasikan alas kaki..."):
+                start_time = time.time()
+                class_name, confidence = classify_image(img)
+                duration = time.time() - start_time
+
+            st.caption(f"⏱ Waktu Proses: {duration:.2f} detik")
+
+            if class_name == "Bukan alas kaki":
+                st.warning("⚠ Gambar tidak dikenali sebagai alas kaki.")
             else:
-                with st.spinner("🧠 Mengklasifikasikan alas kaki..."):
-                    start_time = time.time()
-                    class_name, confidence = classify_image(img)
-                    duration = time.time() - start_time
+                st.session_state.detections["footwear"] += 1
+                st.session_state.history.append({"Tipe": "Alas Kaki", "Hasil": class_name})
 
-                st.caption(f"⏱ Waktu Proses: {duration:.2f} detik")
+                st.success(f"✅ Jenis Alas Kaki: *{class_name}* ({confidence}%)")
+                st.markdown("### 🛍️ Rekomendasi Produk Serupa:")
 
-                if class_name == "Bukan alas kaki":
-                    st.warning("⚠ Gambar tidak dikenali sebagai alas kaki.")
-                else:
-                    st.session_state.detections["footwear"] += 1
-                    st.session_state.history.append({"Tipe": "Alas Kaki", "Hasil": class_name})
-
-                    st.success(f"✅ Jenis Alas Kaki: *{class_name}* ({confidence}%)")
-                    st.markdown("### 🛍️ Rekomendasi Produk Serupa:")
-
-                    if class_name == "Sandal":
-                        st.write("- [Sandal Kulit Premium - Rp 189.000](https://tokopedia.com)")
-                        st.write("- [Sandal Gunung Anti Slip - Rp 220.000](https://shopee.co.id)")
-                    elif class_name == "Shoe":
-                        st.write("- [Sneakers Sporty X - Rp 350.000](https://tokopedia.com)")
-                        st.write("- [Sepatu Formal Pria - Rp 420.000](https://shopee.co.id)")
-                    elif class_name == "Boot":
-                        st.write("- [Boot Kulit Asli - Rp 490.000](https://tokopedia.com)")
-                        st.write("- [Boot Safety Outdoor - Rp 520.000](https://shopee.co.id)")
+                if class_name == "Sandal":
+                    st.write("- [Sandal Kulit Premium - Rp 189.000](https://tokopedia.com)")
+                    st.write("- [Sandal Gunung Anti Slip - Rp 220.000](https://shopee.co.id)")
+                elif class_name == "Shoe":
+                    st.write("- [Sneakers Sporty X - Rp 350.000](https://tokopedia.com)")
+                    st.write("- [Sepatu Formal Pria - Rp 420.000](https://shopee.co.id)")
+                elif class_name == "Boot":
+                    st.write("- [Boot Kulit Asli - Rp 490.000](https://tokopedia.com)")
+                    st.write("- [Boot Safety Outdoor - Rp 520.000](https://shopee.co.id)")
     else:
         st.info("📤 Silakan unggah gambar atau gunakan kamera.")
+
 
 # =====================================================
 # STATISTIK & EKSPOR (KUSTOM WARNA)
