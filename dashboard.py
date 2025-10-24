@@ -10,7 +10,6 @@ from PIL import Image
 import time
 import os
 import pandas as pd
-import matplotlib.pyplot as plt
 
 # =====================================================
 # KONFIGURASI HALAMAN
@@ -37,9 +36,10 @@ with st.sidebar.expander("ℹ️ Tentang Aplikasi", expanded=True):
 
     ---
     ### 🎯 Tujuan Aplikasi
-    - Menerapkan konsep **Computer Vision** secara interaktif dan praktis  
-    - Memberikan pengalaman **deteksi visual real-time** bagi pengguna  
-    - Menunjukkan bagaimana **AI dapat digunakan dalam klasifikasi objek sederhana**
+    Aplikasi ini bertujuan untuk:
+    - Menerapkan konsep **Computer Vision** secara interaktif dan praktis.  
+    - Memberikan pengalaman **deteksi visual real-time** bagi pengguna.  
+    - Menunjukkan bagaimana **AI dapat digunakan dalam klasifikasi objek sederhana.**
 
     ---
     ### 🔍 Fitur Utama:
@@ -52,10 +52,17 @@ with st.sidebar.expander("ℹ️ Tentang Aplikasi", expanded=True):
     ### 🧠 Tentang Teknologi
     Aplikasi ini menggunakan kombinasi **deteksi objek** dan **klasifikasi citra**  
     untuk menghasilkan hasil deteksi yang cepat dan akurat.
+
+    ---
+    Pilih mode, unggah gambar, dan lihat hasil deteksinya secara real-time! 🚀
     """)
 
+    
 # =====================================================
-# 🌈 PILIHAN TEMA WARNA
+# 🌈 PILIHAN TEMA WARNA (MULTI THEME)
+# =====================================================
+# =====================================================
+# 🌈 PILIHAN TEMA WARNA (PASTEL STYLE)
 # =====================================================
 st.sidebar.markdown("### 🌈 Tema Tampilan")
 theme = st.sidebar.selectbox(
@@ -63,39 +70,84 @@ theme = st.sidebar.selectbox(
     ["💡 Default", "🌙 Dark", "🌊 Ocean", "🌸 Pink", "🌲 Forest", "🌅 Sunset"]
 )
 
-# Tema CSS custom
-theme_styles = {
-    "🌙 Dark": {
-        "body": "#1E1E1E", "text": "#EAEAEA", "sidebar": "#2B2B2B", "button": "#444", "button_hover": "#555", "link": "#9CDCFE"
-    },
-    "🌊 Ocean": {
-        "body": "#E0F7FA", "text": "#004D40", "sidebar": "#B2EBF2", "button": "#80DEEA", "button_hover": "#4DD0E1", "link": "#00838F"
-    },
-    "🌸 Pink": {
-        "body": "#FFF0F6", "text": "#4A0033", "sidebar": "#FFD6E7", "button": "#FFB6C1", "button_hover": "#FF9EBB", "link": "#C2185B"
-    },
-    "🌲 Forest": {
-        "body": "#E8F5E9", "text": "#1B5E20", "sidebar": "#C8E6C9", "button": "#A5D6A7", "button_hover": "#81C784", "link": "#2E7D32"
-    },
-    "🌅 Sunset": {
-        "body": "#FFF3E0", "text": "#4E342E", "sidebar": "#FFE0B2", "button": "#FFCC80", "button_hover": "#FFB74D", "link": "#E65100"
-    },
-    "💡 Default": {
-        "body": "#FAFAFA", "text": "#0E1117", "sidebar": "#FFFFFF", "button": "#AEDFF7", "button_hover": "#90CAF9", "link": "#1E88E5"
-    }
-}
+# --- 🌙 DARK (soft gray-black) ---
+if theme == "🌙 Dark":
+    st.markdown("""
+        <style>
+        body, .stApp { background-color: #1E1E1E !important; color: #EAEAEA !important; }
+        section[data-testid="stSidebar"] { background-color: #2B2B2B !important; color: #EAEAEA !important; }
+        .stButton>button { background-color: #444 !important; color: #FAFAFA !important; border-radius: 8px; }
+        .stButton>button:hover { background-color: #555 !important; transform: scale(1.03); }
+        a { color: #9CDCFE !important; }
+        a:hover { color: #C5E4FD !important; text-decoration: underline; }
+        </style>
+    """, unsafe_allow_html=True)
 
-style = theme_styles[theme]
-st.markdown(f"""
-    <style>
-    body, .stApp {{ background-color: {style['body']} !important; color: {style['text']} !important; }}
-    section[data-testid="stSidebar"] {{ background-color: {style['sidebar']} !important; color: {style['text']} !important; }}
-    .stButton>button {{ background-color: {style['button']} !important; color: {style['text']} !important; border-radius: 8px; }}
-    .stButton>button:hover {{ background-color: {style['button_hover']} !important; transform: scale(1.03); }}
-    a {{ color: {style['link']} !important; }}
-    a:hover {{ text-decoration: underline; }}
-    </style>
-""", unsafe_allow_html=True)
+# --- 🌊 OCEAN (pastel toska & biru muda) ---
+elif theme == "🌊 Ocean":
+    st.markdown("""
+        <style>
+        body, .stApp { background-color: #E0F7FA !important; color: #004D40 !important; }
+        section[data-testid="stSidebar"] { background-color: #B2EBF2 !important; color: #004D40 !important; }
+        .stButton>button { background-color: #80DEEA !important; color: #004D40 !important; border-radius: 8px; }
+        .stButton>button:hover { background-color: #4DD0E1 !important; }
+        a { color: #00838F !important; }
+        a:hover { color: #006064 !important; text-decoration: underline; }
+        </style>
+    """, unsafe_allow_html=True)
+
+# --- 🌸 PINK (soft blush pastel) ---
+elif theme == "🌸 Pink":
+    st.markdown("""
+        <style>
+        body, .stApp { background-color: #FFF0F6 !important; color: #4A0033 !important; }
+        section[data-testid="stSidebar"] { background-color: #FFD6E7 !important; color: #4A0033 !important; }
+        .stButton>button { background-color: #FFB6C1 !important; color: #4A0033 !important; border-radius: 8px; }
+        .stButton>button:hover { background-color: #FF9EBB !important; }
+        a { color: #C2185B !important; }
+        a:hover { color: #AD1457 !important; text-decoration: underline; }
+        </style>
+    """, unsafe_allow_html=True)
+
+# --- 🌲 FOREST (soft mint & hijau muda) ---
+elif theme == "🌲 Forest":
+    st.markdown("""
+        <style>
+        body, .stApp { background-color: #E8F5E9 !important; color: #1B5E20 !important; }
+        section[data-testid="stSidebar"] { background-color: #C8E6C9 !important; color: #1B5E20 !important; }
+        .stButton>button { background-color: #A5D6A7 !important; color: #1B5E20 !important; border-radius: 8px; }
+        .stButton>button:hover { background-color: #81C784 !important; }
+        a { color: #2E7D32 !important; }
+        a:hover { color: #1B5E20 !important; text-decoration: underline; }
+        </style>
+    """, unsafe_allow_html=True)
+
+# --- 🌅 SUNSET (peach pastel & coral lembut) ---
+elif theme == "🌅 Sunset":
+    st.markdown("""
+        <style>
+        body, .stApp { background-color: #FFF3E0 !important; color: #4E342E !important; }
+        section[data-testid="stSidebar"] { background-color: #FFE0B2 !important; color: #4E342E !important; }
+        .stButton>button { background-color: #FFCC80 !important; color: #4E342E !important; border-radius: 8px; }
+        .stButton>button:hover { background-color: #FFB74D !important; }
+        a { color: #E65100 !important; }
+        a:hover { color: #BF360C !important; text-decoration: underline; }
+        </style>
+    """, unsafe_allow_html=True)
+
+# --- 💡 DEFAULT (putih lembut & abu pastel) ---
+else:
+    st.markdown("""
+        <style>
+        body, .stApp { background-color: #FAFAFA !important; color: #0E1117 !important; }
+        section[data-testid="stSidebar"] { background-color: #FFFFFF !important; color: #0E1117 !important; }
+        .stButton>button { background-color: #AEDFF7 !important; color: #003366 !important; border-radius: 8px; }
+        .stButton>button:hover { background-color: #90CAF9 !important; }
+        a { color: #1E88E5 !important; }
+        a:hover { color: #1565C0 !important; text-decoration: underline; }
+        </style>
+    """, unsafe_allow_html=True)
+
 
 # =====================================================
 # LOAD MODELS
@@ -164,12 +216,16 @@ def classify_image(img):
         return "Bukan alas kaki", 0
 
 # =====================================================
-# SIDEBAR SETTINGS
+# SIDEBAR
 # =====================================================
 menu = st.sidebar.radio("Pilih Mode:", ["🧍 Deteksi Gender (YOLO)", "👞 Klasifikasi Alas Kaki (CNN)"])
 conf_threshold = st.sidebar.slider("Confidence Threshold (YOLO)", 0.1, 1.0, 0.3, 0.05)
+
+st.sidebar.markdown("### ⚙️ Fitur Opsional")
 export_enable = st.sidebar.checkbox("💾 Simpan Riwayat ke CSV", value=True)
 show_chart = st.sidebar.checkbox("📈 Tampilkan Statistik Visual", value=True)
+
+st.sidebar.markdown("### Pilih Sumber Gambar")
 input_mode = st.sidebar.radio("Metode Input:", ["📤 Upload Gambar", "📷 Gunakan Kamera"])
 
 uploaded_file = None
@@ -190,14 +246,15 @@ if "history" not in st.session_state:
     st.session_state.history = []
 
 # =====================================================
-# MODE DETEKSI & KLASIFIKASI
+# MODE: YOLO (Deteksi Gender)
 # =====================================================
-if uploaded_file:
-    img = Image.open(uploaded_file)
-    st.image(img, caption="Gambar yang Diupload", use_container_width=True)
+if menu == "🧍 Deteksi Gender (YOLO)":
+    st.subheader("🧍 Deteksi Gender (Men/Women)")
 
-    if menu == "🧍 Deteksi Gender (YOLO)":
-        st.subheader("🧍 Deteksi Gender (Men/Women)")
+    if uploaded_file:
+        img = Image.open(uploaded_file)
+        st.image(img, caption="Gambar yang Diupload", use_container_width=True)
+
         with st.spinner("🔎 Mendeteksi gender..."):
             start_time = time.time()
             annotated_img, detections = detect_objects(img, conf_threshold)
@@ -213,44 +270,80 @@ if uploaded_file:
                 gender_detected = detections[0]["label"]
                 st.session_state.history.append({"Tipe": "Gender", "Hasil": gender_detected})
 
-                # Rekomendasi
+                # 🔹 Rekomendasi berdasarkan gender
                 if gender_detected == "Men":
                     st.markdown("### 🧴 Rekomendasi untuk Pria")
-                    st.info("- Gunakan *moisturizer* harian.\n- Outfit kasual: kemeja + jeans.\n- Face Wash Men Deep Clean - Rp 35.000")
+                    st.info("""
+                    - Gunakan *moisturizer* harian untuk menjaga kelembapan kulit.  
+                    - Pilihan outfit kasual: **kemeja polos + jeans slim fit**.  
+                    - Produk rekomendasi utama: **Face Wash Men Deep Clean - Rp 35.000**
+                    """)
+                    st.markdown("#### 🛒 Belanja Sekarang:")
+                    st.write("- [🛍️ Face Wash Men Deep Clean (Tokopedia)](https://www.tokopedia.com/search?st=product&q=face%20wash%20men%20deep%20clean)")
+                    st.write("- [🧴 Moisturizer Men (Shopee)](https://shopee.co.id/search?keyword=moisturizer%20men)")
+                    st.write("- [👕 Kemeja Polos Pria (Tokopedia)](https://www.tokopedia.com/search?st=product&q=kemeja%20polos%20pria)")
+                    st.write("- [👟 Sepatu Kasual Pria (Shopee)](https://shopee.co.id/search?keyword=sepatu%20kasual%20pria)")
+                    st.write("- [⌚ Jam Tangan Sporty (Tokopedia)](https://www.tokopedia.com/search?st=product&q=jam%20tangan%20pria)")
+
                 elif gender_detected == "Women":
                     st.markdown("### 💅 Rekomendasi untuk Wanita")
-                    st.info("- Gunakan *sunscreen* setiap hari.\n- Outfit kasual: floral dress.\n- Serum Vitamin C Bright - Rp 50.000")
+                    st.info("""
+                    - Gunakan *sunscreen* setiap hari (minimal SPF 30+) untuk melindungi kulit dari UV.  
+                    - Coba gaya kasual dengan **floral dress** dan aksesori minimalis.  
+                    - Produk rekomendasi utama: **Serum Vitamin C Bright - Rp 50.000**
+                    """)
+                    st.markdown("#### 🛒 Belanja Sekarang:")
+                    st.write("- [☀️ Sunscreen SPF 30+ (Shopee)](https://shopee.co.id/search?keyword=sunscreen%20spf%2030)")
+                    st.write("- [🌸 Floral Dress Casual (Tokopedia)](https://www.tokopedia.com/search?st=product&q=floral%20dress)")
+                    st.write("- [💧 Serum Vitamin C Bright (Shopee)](https://shopee.co.id/search?keyword=serum%20vitamin%20c%20bright)")
+                    st.write("- [👜 Tas Fashion Wanita (Tokopedia)](https://www.tokopedia.com/search?st=product&q=tas%20wanita)")
+                    st.write("- [👠 High Heels Elegant (Shopee)](https://shopee.co.id/search?keyword=high%20heels%20elegant)")
             else:
                 st.warning("⚠ Gambar bukan domain gender.")
         else:
             st.warning("⚠ Tidak ada objek terdeteksi.")
-
-    elif menu == "👞 Klasifikasi Alas Kaki (CNN)":
-        st.subheader("👞 Klasifikasi Alas Kaki (Boot/Sandal/Shoe)")
-        annotated_img, detections = detect_objects(img, conf_threshold)
-        contains_human = any(d["label"] in ["Men", "Women"] for d in detections)
-
-        if contains_human:
-            st.error("🚫 Gambar mengandung manusia, bukan domain alas kaki.")
-        else:
-            with st.spinner("🧠 Mengklasifikasikan..."):
-                start_time = time.time()
-                class_name, confidence = classify_image(img)
-                duration = time.time() - start_time
-
-            st.caption(f"⏱ Waktu Proses: {duration:.2f} detik")
-
-            if class_name == "Bukan alas kaki":
-                st.warning("⚠ Gambar tidak dikenali sebagai alas kaki.")
-            else:
-                st.session_state.detections["footwear"] += 1
-                st.session_state.history.append({"Tipe": "Alas Kaki", "Hasil": class_name})
-                st.success(f"✅ Jenis Alas Kaki: *{class_name}* ({confidence}%)")
-else:
-    st.info("📤 Silakan unggah gambar atau gunakan kamera.")
+    else:
+        st.info("📤 Silakan unggah gambar atau gunakan kamera.")
 
 # =====================================================
-# STATISTIK DETEKSI
+# MODE: CNN (Klasifikasi Alas Kaki)
+# =====================================================
+elif menu == "👞 Klasifikasi Alas Kaki (CNN)":
+    st.subheader("👞 Klasifikasi Alas Kaki (Boot/Sandal/Shoe)")
+
+    if uploaded_file:
+        img = Image.open(uploaded_file)
+        st.image(img, caption="Gambar yang Diupload", use_container_width=True)
+
+        with st.spinner("🧠 Mengklasifikasikan..."):
+            start_time = time.time()
+            class_name, confidence = classify_image(img)
+            duration = time.time() - start_time
+
+        st.caption(f"⏱ Waktu Proses: {duration:.2f} detik")
+
+        if class_name == "Bukan alas kaki":
+            st.warning("⚠ Gambar tidak dikenali sebagai alas kaki.")
+        else:
+            st.session_state.detections["footwear"] += 1
+            st.session_state.history.append({"Tipe": "Alas Kaki", "Hasil": class_name})
+
+            st.success(f"✅ Jenis Alas Kaki: *{class_name}* ({confidence}%)")
+            st.markdown("### 🛍️ Rekomendasi Produk Serupa:")
+            if class_name == "Sandal":
+                st.write("- [Sandal Kulit Premium - Rp 189.000](https://tokopedia.com)")
+                st.write("- [Sandal Gunung Anti Slip - Rp 220.000](https://shopee.co.id)")
+            elif class_name == "Shoe":
+                st.write("- [Sneakers Sporty X - Rp 350.000](https://tokopedia.com)")
+                st.write("- [Sepatu Formal Pria - Rp 420.000](https://shopee.co.id)")
+            elif class_name == "Boot":
+                st.write("- [Boot Kulit Asli - Rp 490.000](https://tokopedia.com)")
+                st.write("- [Boot Safety Outdoor - Rp 520.000](https://shopee.co.id)")
+    else:
+        st.info("📤 Silakan unggah gambar atau gunakan kamera.")
+
+# =====================================================
+# STATISTIK & EKSPOR (KUSTOM WARNA)
 # =====================================================
 st.markdown("---")
 st.markdown("### 📊 Statistik Deteksi Sementara")
@@ -261,24 +354,35 @@ col2.metric("Total Deteksi Alas Kaki", st.session_state.detections["footwear"])
 
 if show_chart and len(st.session_state.history) > 0:
     df = pd.DataFrame(st.session_state.history)
+
+    import matplotlib.pyplot as plt
+
+    # Hitung frekuensi
     counts = df["Hasil"].value_counts()
 
-    theme_colors = {
-        "🌸 Pink": ["#FF80AB", "#F48FB1", "#EC407A"],
-        "🌲 Forest": ["#66BB6A", "#81C784", "#A5D6A7"],
-        "🌊 Ocean": ["#4DD0E1", "#26C6DA", "#00ACC1"],
-        "🌅 Sunset": ["#FFB74D", "#FF8A65", "#F06292"],
-        "🌙 Dark": ["#90CAF9", "#F48FB1", "#CE93D8"],
-        "💡 Default": ["#64B5F6", "#4FC3F7", "#81D4FA"]
-    }
-    colors = theme_colors.get(theme, ["#64B5F6", "#4FC3F7", "#81D4FA"])
+    # Tentukan warna sesuai tema
+    if theme == "🌸 Pink":
+        colors = ["#FF80AB", "#F48FB1", "#EC407A"]
+    elif theme == "🌲 Forest":
+        colors = ["#66BB6A", "#81C784", "#A5D6A7"]
+    elif theme == "🌊 Ocean":
+        colors = ["#4DD0E1", "#26C6DA", "#00ACC1"]
+    elif theme == "🌅 Sunset":
+        colors = ["#FFB74D", "#FF8A65", "#F06292"]
+    elif theme == "🌙 Dark":
+        colors = ["#90CAF9", "#F48FB1", "#CE93D8"]
+    else:  # Default
+        colors = ["#64B5F6", "#4FC3F7", "#81D4FA"]
 
+    # Buat plot
     fig, ax = plt.subplots()
     counts.plot(kind="bar", color=colors, ax=ax)
+
     ax.set_xlabel("Kategori Deteksi", fontsize=12)
     ax.set_ylabel("Jumlah", fontsize=12)
     ax.set_title("Statistik Deteksi (Gender & Alas Kaki)", fontsize=14, weight='bold')
     ax.grid(axis="y", linestyle="--", alpha=0.4)
+
     st.pyplot(fig)
 
 # =====================================================
@@ -287,6 +391,7 @@ if show_chart and len(st.session_state.history) > 0:
 if export_enable and len(st.session_state.history) > 0:
     csv = df.to_csv(index=False).encode("utf-8")
     st.download_button("💾 Unduh Riwayat Deteksi (CSV)", data=csv, file_name="riwayat_deteksi.csv", mime="text/csv")
+
 
 # =====================================================
 # FOOTER
