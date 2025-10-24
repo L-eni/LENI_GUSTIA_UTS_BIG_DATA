@@ -173,6 +173,18 @@ def load_models():
 yolo_model, classifier, class_labels = load_models()
 
 # =====================================================
+# FUNGSI CEK DOMAIN MANUSIA
+# =====================================================
+def contains_human(img, conf_threshold=0.5):
+    results = yolo_model(img)
+    for box in results[0].boxes:
+        label = results[0].names[int(box.cls)]
+        conf = float(box.conf)
+        if label in ["Men", "Women"] and conf >= conf_threshold:
+            return True
+    return False
+
+# =====================================================
 # DETEKSI GENDER (YOLO)
 # =====================================================
 def detect_objects(img, conf_threshold=0.3):
@@ -254,7 +266,10 @@ if menu == "🧍 Deteksi Gender (YOLO)":
     if uploaded_file:
         img = Image.open(uploaded_file)
         st.image(img, caption="Gambar yang Diupload", use_container_width=True)
-
+# --- CEK APakah gambar mengandung manusia dulu ---
+if contains_human(img, conf_threshold):
+    st.error("🚫 Gambar mengandung manusia, bukan domain alas kaki.")
+else:
         with st.spinner("🔎 Mendeteksi gender..."):
             start_time = time.time()
             annotated_img, detections = detect_objects(img, conf_threshold)
