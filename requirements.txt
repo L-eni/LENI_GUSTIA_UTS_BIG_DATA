@@ -1,6 +1,10 @@
-streamlit
-ultralytics
-tensorflow
-opencv-python-headless
-Pillow
+matplotlib
 numpy
+opencv-python-headless
+pandas
+protobuf
+pillow
+streamlit
+tensorflow
+torch
+ultralytics
