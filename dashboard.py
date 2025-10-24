@@ -263,28 +263,28 @@ if "history" not in st.session_state:
 if menu == "🧍 Deteksi Gender (YOLO)":
     st.subheader("🧍 Deteksi Gender (Men/Women)")
 
-   if uploaded_file:
-    img = Image.open(uploaded_file)
-    st.image(img, caption="Gambar yang Diupload", use_container_width=True)
+    if uploaded_file:
+        img = Image.open(uploaded_file)
+        st.image(img, caption="Gambar yang Diupload", use_container_width=True)
 
-    # --- CEK apakah gambar mengandung manusia dulu ---
-    if contains_human(img, conf_threshold):
-        st.error("🚫 Gambar mengandung manusia, bukan domain alas kaki.")
-    else:
-        with st.spinner("🔎 Mendeteksi gender..."):
-            start_time = time.time()
-            annotated_img, detections = detect_objects(img, conf_threshold)
-            duration = time.time() - start_time
+        # --- CEK apakah gambar mengandung manusia dulu ---
+        if contains_human(img, conf_threshold):
+            st.error("🚫 Gambar mengandung manusia, bukan domain alas kaki.")
+        else:
+            with st.spinner("🔎 Mendeteksi gender..."):
+                start_time = time.time()
+                annotated_img, detections = detect_objects(img, conf_threshold)
+                duration = time.time() - start_time
 
-        st.image(annotated_img, caption="Hasil Deteksi", use_container_width=True)
-        st.caption(f"⏱ Waktu Proses: {duration:.2f} detik")
+            st.image(annotated_img, caption="Hasil Deteksi", use_container_width=True)
+            st.caption(f"⏱ Waktu Proses: {duration:.2f} detik")
 
-        if detections:
-            valid = any(d["label"] in ["Men", "Women"] for d in detections)
-            if valid:
-                st.session_state.detections["gender"] += 1
-                gender_detected = detections[0]["label"]
-                st.session_state.history.append({"Tipe": "Gender", "Hasil": gender_detected})
+            if detections:
+                valid = any(d["label"] in ["Men", "Women"] for d in detections)
+                if valid:
+                    st.session_state.detections["gender"] += 1
+                    gender_detected = detections[0]["label"]
+                    st.session_state.history.append({"Tipe": "Gender", "Hasil": gender_detected})
 
                 # 🔹 Rekomendasi berdasarkan gender
                 if gender_detected == "Men":
