@@ -276,6 +276,16 @@ if "detections" not in st.session_state:
 if "history" not in st.session_state:
     st.session_state.history = []
 
+# =========================
+# Fungsi helper
+# =========================
+def contains_human(img, conf_threshold=0.5):
+    """
+    Mengembalikan True jika YOLO mendeteksi manusia (Men/Women) dalam gambar.
+    """
+    _, detections = detect_objects(img, conf_threshold)
+    return any(d["label"] in ["Men", "Women"] for d in detections)
+
 # =====================================================
 # MODE: YOLO (Deteksi Gender)
 # =====================================================
@@ -294,45 +304,29 @@ if menu == "🧍 Deteksi Gender (YOLO)":
         st.image(annotated_img, caption="Hasil Deteksi", use_container_width=True)
         st.caption(f"⏱ Waktu Proses: {duration:.2f} detik")
 
-        if detections:
-            valid = any(d["label"] in ["Men", "Women"] for d in detections)
-            if valid:
-                st.session_state.detections["gender"] += 1
-                gender_detected = detections[0]["label"]
-                st.session_state.history.append({"Tipe": "Gender", "Hasil": gender_detected})
+        human_detected = any(d["label"] in ["Men", "Women"] for d in detections)
 
-                # 🔹 Rekomendasi berdasarkan gender
-                if gender_detected == "Men":
-                    st.markdown("### 🧴 Rekomendasi untuk Pria")
-                    st.info("""
-                    - Gunakan *moisturizer* harian untuk menjaga kelembapan kulit.  
-                    - Pilihan outfit kasual: **kemeja polos + jeans slim fit**.  
-                    - Produk rekomendasi utama: **Face Wash Men Deep Clean - Rp 35.000**
-                    """)
-                    st.markdown("#### 🛒 Belanja Sekarang:")
-                    st.write("- [🛍️ Face Wash Men Deep Clean (Tokopedia)](https://www.tokopedia.com/search?st=product&q=face%20wash%20men%20deep%20clean)")
-                    st.write("- [🧴 Moisturizer Men (Shopee)](https://shopee.co.id/search?keyword=moisturizer%20men)")
-                    st.write("- [👕 Kemeja Polos Pria (Tokopedia)](https://www.tokopedia.com/search?st=product&q=kemeja%20polos%20pria)")
-                    st.write("- [👟 Sepatu Kasual Pria (Shopee)](https://shopee.co.id/search?keyword=sepatu%20kasual%20pria)")
-                    st.write("- [⌚ Jam Tangan Sporty (Tokopedia)](https://www.tokopedia.com/search?st=product&q=jam%20tangan%20pria)")
+        if human_detected:
+            gender_detected = detections[0]["label"]
+            st.session_state.detections["gender"] += 1
+            st.session_state.history.append({"Tipe": "Gender", "Hasil": gender_detected})
 
-                elif gender_detected == "Women":
-                    st.markdown("### 💅 Rekomendasi untuk Wanita")
-                    st.info("""
-                    - Gunakan *sunscreen* setiap hari (minimal SPF 30+) untuk melindungi kulit dari UV.  
-                    - Coba gaya kasual dengan **floral dress** dan aksesori minimalis.  
-                    - Produk rekomendasi utama: **Serum Vitamin C Bright - Rp 50.000**
-                    """)
-                    st.markdown("#### 🛒 Belanja Sekarang:")
-                    st.write("- [☀️ Sunscreen SPF 30+ (Shopee)](https://shopee.co.id/search?keyword=sunscreen%20spf%2030)")
-                    st.write("- [🌸 Floral Dress Casual (Tokopedia)](https://www.tokopedia.com/search?st=product&q=floral%20dress)")
-                    st.write("- [💧 Serum Vitamin C Bright (Shopee)](https://shopee.co.id/search?keyword=serum%20vitamin%20c%20bright)")
-                    st.write("- [👜 Tas Fashion Wanita (Tokopedia)](https://www.tokopedia.com/search?st=product&q=tas%20wanita)")
-                    st.write("- [👠 High Heels Elegant (Shopee)](https://shopee.co.id/search?keyword=high%20heels%20elegant)")
-            else:
-                st.warning("⚠ Gambar bukan domain gender.")
+            if gender_detected == "Men":
+                st.markdown("### 🧴 Rekomendasi untuk Pria")
+                st.info("""
+                - Gunakan *moisturizer* harian untuk menjaga kelembapan kulit.  
+                - Pilihan outfit kasual: **kemeja polos + jeans slim fit**.  
+                - Produk rekomendasi utama: **Face Wash Men Deep Clean - Rp 35.000**
+                """)
+            elif gender_detected == "Women":
+                st.markdown("### 💅 Rekomendasi untuk Wanita")
+                st.info("""
+                - Gunakan *sunscreen* setiap hari (minimal SPF 30+) untuk melindungi kulit dari UV.  
+                - Coba gaya kasual dengan **floral dress** dan aksesori minimalis.  
+                - Produk rekomendasi utama: **Serum Vitamin C Bright - Rp 50.000**
+                """)
         else:
-            st.warning("⚠ Tidak ada objek terdeteksi.")
+            st.warning("⚠ Tidak ada manusia terdeteksi dalam gambar.")
     else:
         st.info("📤 Silakan unggah gambar atau gunakan kamera.")
 
@@ -346,35 +340,38 @@ elif menu == "👞 Klasifikasi Alas Kaki (CNN)":
         img = Image.open(uploaded_file)
         st.image(img, caption="Gambar yang Diupload", use_container_width=True)
 
-        # ⚡ Hanya CNN yang bekerja — YOLO tidak dijalankan di mode ini
-        with st.spinner("🧠 Mengklasifikasikan..."):
-            start_time = time.time()
-            class_name, confidence = classify_image(img)
-            duration = time.time() - start_time
+        with st.spinner("🔎 Mengecek apakah gambar mengandung manusia..."):
+            if contains_human(img):
+                st.error("🚫 Gambar mengandung manusia, klasifikasi alas kaki tidak dijalankan.")
+            else:
+                with st.spinner("🧠 Mengklasifikasikan alas kaki..."):
+                    start_time = time.time()
+                    class_name, confidence = classify_image(img)
+                    duration = time.time() - start_time
 
-        st.caption(f"⏱ Waktu Proses: {duration:.2f} detik")
+                st.caption(f"⏱ Waktu Proses: {duration:.2f} detik")
 
-        # 🔍 Tampilkan hasil CNN
-        if class_name == "Bukan alas kaki":
-            st.warning("⚠ Gambar tidak dikenali sebagai alas kaki.")
-        else:
-            st.session_state.detections["footwear"] += 1
-            st.session_state.history.append({"Tipe": "Alas Kaki", "Hasil": class_name})
+                if class_name == "Bukan alas kaki":
+                    st.warning("⚠ Gambar tidak dikenali sebagai alas kaki.")
+                else:
+                    st.session_state.detections["footwear"] += 1
+                    st.session_state.history.append({"Tipe": "Alas Kaki", "Hasil": class_name})
 
-            st.success(f"✅ Jenis Alas Kaki: *{class_name}* ({confidence}%)")
-            st.markdown("### 🛍️ Rekomendasi Produk Serupa:")
+                    st.success(f"✅ Jenis Alas Kaki: *{class_name}* ({confidence}%)")
+                    st.markdown("### 🛍️ Rekomendasi Produk Serupa:")
 
-            if class_name == "Sandal":
-                st.write("- [Sandal Kulit Premium - Rp 189.000](https://tokopedia.com)")
-                st.write("- [Sandal Gunung Anti Slip - Rp 220.000](https://shopee.co.id)")
-            elif class_name == "Shoe":
-                st.write("- [Sneakers Sporty X - Rp 350.000](https://tokopedia.com)")
-                st.write("- [Sepatu Formal Pria - Rp 420.000](https://shopee.co.id)")
-            elif class_name == "Boot":
-                st.write("- [Boot Kulit Asli - Rp 490.000](https://tokopedia.com)")
-                st.write("- [Boot Safety Outdoor - Rp 520.000](https://shopee.co.id)")
+                    if class_name == "Sandal":
+                        st.write("- [Sandal Kulit Premium - Rp 189.000](https://tokopedia.com)")
+                        st.write("- [Sandal Gunung Anti Slip - Rp 220.000](https://shopee.co.id)")
+                    elif class_name == "Shoe":
+                        st.write("- [Sneakers Sporty X - Rp 350.000](https://tokopedia.com)")
+                        st.write("- [Sepatu Formal Pria - Rp 420.000](https://shopee.co.id)")
+                    elif class_name == "Boot":
+                        st.write("- [Boot Kulit Asli - Rp 490.000](https://tokopedia.com)")
+                        st.write("- [Boot Safety Outdoor - Rp 520.000](https://shopee.co.id)")
     else:
         st.info("📤 Silakan unggah gambar atau gunakan kamera.")
+
 
 # =====================================================
 # STATISTIK & EKSPOR (KUSTOM WARNA)
