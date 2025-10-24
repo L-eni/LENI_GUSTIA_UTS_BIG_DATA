@@ -57,7 +57,7 @@ with st.sidebar.expander("🎥 Tutorial Penggunaan", expanded=False):
     st.markdown("""
     Tonton video singkat berikut untuk memahami cara menggunakan aplikasi ini 👇
     """)
-    st.video("https://youtu.be/c0yS8ksvPbA?si=NUe2C7j7zccV7itb")  # Ganti dengan link YouTube kamu
+    st.video("https://youtu.be/MzCaD3MHY_4") 
     st.markdown("""
     ---
     💡 Tips:
