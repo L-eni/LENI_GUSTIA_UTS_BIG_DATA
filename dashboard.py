@@ -385,14 +385,14 @@ elif menu == "👞 Klasifikasi Alas Kaki (CNN)":
                 st.markdown("### 🛒 Belanja Sekarang:")
 
                 if class_name == "Sandal":
-                    st.write("- [Sandal Kulit Premium - Rp 189.000](https://tokopedia.com)")
-                    st.write("- [Sandal Gunung Anti Slip - Rp 220.000](https://shopee.co.id)")
+                    st.write("- [Sandal Kulit Premium](https://tokopedia.com)")
+                    st.write("- [Sandal Gunung Anti Slip](https://shopee.co.id)")
                 elif class_name == "Shoe":
-                    st.write("- [Sneakers Sporty X - Rp 350.000](https://tokopedia.com)")
-                    st.write("- [Sepatu Formal Pria - Rp 420.000](https://shopee.co.id)")
+                    st.write("- [Sneakers Sporty X](https://tokopedia.com)")
+                    st.write("- [Sepatu Formal Pria](https://shopee.co.id)")
                 elif class_name == "Boot":
-                    st.write("- [Boot Kulit Asli - Rp 490.000](https://tokopedia.com)")
-                    st.write("- [Boot Safety Outdoor - Rp 520.000](https://shopee.co.id)")
+                    st.write("- [Boot Kulit Asli](https://tokopedia.com)")
+                    st.write("- [Boot Safety Outdoor](https://shopee.co.id)")
 
 
 # =====================================================
