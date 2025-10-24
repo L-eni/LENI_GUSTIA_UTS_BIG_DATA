@@ -394,6 +394,7 @@ elif menu == "👞 Klasifikasi Alas Kaki (CNN)":
                     st.write("- [Boot Kulit Asli - Rp 490.000](https://tokopedia.com)")
                     st.write("- [Boot Safety Outdoor - Rp 520.000](https://shopee.co.id)")
 
+
 # =====================================================
 # STATISTIK & EKSPOR (KUSTOM WARNA)
 # =====================================================
@@ -426,17 +427,17 @@ if show_chart and len(st.session_state.history) > 0:
     else:  
         colors = ["#64B5F6", "#4FC3F7", "#81D4FA"]
 
-    # Buat plot
+    # Buat plot dengan ukuran lebih kecil
     fig, ax = plt.subplots(figsize=(6, 4))  
-counts.plot(kind="bar", color=colors, ax=ax)
+    counts.plot(kind="bar", color=colors, ax=ax)
 
-ax.set_xlabel("Kategori Deteksi", fontsize=10)
-ax.set_ylabel("Jumlah", fontsize=10)
-ax.set_title("Statistik Deteksi (Gender & Alas Kaki)", fontsize=12, weight='bold')
-ax.grid(axis="y", linestyle="--", alpha=0.4)
+    ax.set_xlabel("Kategori Deteksi", fontsize=10)
+    ax.set_ylabel("Jumlah", fontsize=10)
+    ax.set_title("Statistik Deteksi (Gender & Alas Kaki)", fontsize=12, weight='bold')
+    ax.grid(axis="y", linestyle="--", alpha=0.4)
 
-fig.tight_layout()
-st.pyplot(fig)
+    fig.tight_layout()
+    st.pyplot(fig)
 
 
 # =====================================================
