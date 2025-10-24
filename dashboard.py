@@ -59,6 +59,21 @@ with st.sidebar.expander("ℹ️ Tentang Aplikasi", expanded=True):
     """)
 
 # =====================================================
+# 🎥 SIDEBAR - VIDEO TUTORIAL
+# =====================================================
+with st.sidebar.expander("🎥 Tutorial Penggunaan", expanded=False):
+    st.markdown("""
+    Tonton video singkat berikut untuk memahami cara menggunakan aplikasi ini 👇
+    """)
+    st.video("https://www.youtube.com/watch?v=abcd1234")  # Ganti dengan link YouTube kamu
+    st.markdown("""
+    ---
+    💡 Tips:
+    - Klik tombol **Play** untuk memulai.
+    - Gunakan mode **Full Screen** agar lebih jelas.
+    """)
+
+# =====================================================
 # 🌈 PILIHAN TEMA WARNA (PASTEL STYLE)
 # =====================================================
 st.sidebar.markdown("### 🌈 Tema Tampilan")
