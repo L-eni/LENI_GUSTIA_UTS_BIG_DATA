@@ -280,44 +280,45 @@ if menu == "🧍 Deteksi Gender (YOLO)":
             st.caption(f"⏱ Waktu Proses: {duration:.2f} detik")
 
             if detections:
+                # --- Cek apakah ada label valid ---
                 valid = any(d["label"] in ["Men", "Women"] for d in detections)
                 if valid:
                     st.session_state.detections["gender"] += 1
                     gender_detected = detections[0]["label"]
                     st.session_state.history.append({"Tipe": "Gender", "Hasil": gender_detected})
 
-                # 🔹 Rekomendasi berdasarkan gender
-                if gender_detected == "Men":
-                    st.markdown("### 🧴 Rekomendasi untuk Pria")
-                    st.info("""
-                    - Gunakan *moisturizer* harian untuk menjaga kelembapan kulit.  
-                    - Pilihan outfit kasual: **kemeja polos + jeans slim fit**.  
-                    - Produk rekomendasi utama: **Face Wash Men Deep Clean - Rp 35.000**
-                    """)
-                    st.markdown("#### 🛒 Belanja Sekarang:")
-                    st.write("- [🛍️ Face Wash Men Deep Clean (Tokopedia)](https://www.tokopedia.com/search?st=product&q=face%20wash%20men%20deep%20clean)")
-                    st.write("- [🧴 Moisturizer Men (Shopee)](https://shopee.co.id/search?keyword=moisturizer%20men)")
-                    st.write("- [👕 Kemeja Polos Pria (Tokopedia)](https://www.tokopedia.com/search?st=product&q=kemeja%20polos%20pria)")
-                    st.write("- [👟 Sepatu Kasual Pria (Shopee)](https://shopee.co.id/search?keyword=sepatu%20kasual%20pria)")
-                    st.write("- [⌚ Jam Tangan Sporty (Tokopedia)](https://www.tokopedia.com/search?st=product&q=jam%20tangan%20pria)")
+                    # 🔹 Rekomendasi berdasarkan gender
+                    if gender_detected == "Men":
+                        st.markdown("### 🧴 Rekomendasi untuk Pria")
+                        st.info("""
+                        - Gunakan *moisturizer* harian untuk menjaga kelembapan kulit.  
+                        - Pilihan outfit kasual: **kemeja polos + jeans slim fit**.  
+                        - Produk rekomendasi utama: **Face Wash Men Deep Clean - Rp 35.000**
+                        """)
+                        st.markdown("#### 🛒 Belanja Sekarang:")
+                        st.write("- [🛍️ Face Wash Men Deep Clean (Tokopedia)](https://www.tokopedia.com/search?st=product&q=face%20wash%20men%20deep%20clean)")
+                        st.write("- [🧴 Moisturizer Men (Shopee)](https://shopee.co.id/search?keyword=moisturizer%20men)")
+                        st.write("- [👕 Kemeja Polos Pria (Tokopedia)](https://www.tokopedia.com/search?st=product&q=kemeja%20polos%20pria)")
+                        st.write("- [👟 Sepatu Kasual Pria (Shopee)](https://shopee.co.id/search?keyword=sepatu%20kasual%20pria)")
+                        st.write("- [⌚ Jam Tangan Sporty (Tokopedia)](https://www.tokopedia.com/search?st=product&q=jam%20tangan%20pria)")
 
-                elif gender_detected == "Women":
-                    st.markdown("### 💅 Rekomendasi untuk Wanita")
-                    st.info("""
-                    - Gunakan *sunscreen* setiap hari (minimal SPF 30+) untuk melindungi kulit dari UV.  
-                    - Coba gaya kasual dengan **floral dress** dan aksesori minimalis.  
-                    - Produk rekomendasi utama: **Serum Vitamin C Bright - Rp 50.000**
-                    """)
-                    st.markdown("#### 🛒 Belanja Sekarang:")
-                    st.write("- [☀️ Sunscreen SPF 30+ (Shopee)](https://shopee.co.id/search?keyword=sunscreen%20spf%2030)")
-                    st.write("- [🌸 Floral Dress Casual (Tokopedia)](https://www.tokopedia.com/search?st=product&q=floral%20dress)")
-                    st.write("- [💧 Serum Vitamin C Bright (Shopee)](https://shopee.co.id/search?keyword=serum%20vitamin%20c%20bright)")
-                    st.write("- [👜 Tas Fashion Wanita (Tokopedia)](https://www.tokopedia.com/search?st=product&q=tas%20wanita)")
-                    st.write("- [👠 High Heels Elegant (Shopee)](https://shopee.co.id/search?keyword=high%20heels%20elegant)")
+                    elif gender_detected == "Women":
+                        st.markdown("### 💅 Rekomendasi untuk Wanita")
+                        st.info("""
+                        - Gunakan *sunscreen* setiap hari (minimal SPF 30+) untuk melindungi kulit dari UV.  
+                        - Coba gaya kasual dengan **floral dress** dan aksesori minimalis.  
+                        - Produk rekomendasi utama: **Serum Vitamin C Bright - Rp 50.000**
+                        """)
+                        st.markdown("#### 🛒 Belanja Sekarang:")
+                        st.write("- [☀️ Sunscreen SPF 30+ (Shopee)](https://shopee.co.id/search?keyword=sunscreen%20spf%2030)")
+                        st.write("- [🌸 Floral Dress Casual (Tokopedia)](https://www.tokopedia.com/search?st=product&q=floral%20dress)")
+                        st.write("- [💧 Serum Vitamin C Bright (Shopee)](https://shopee.co.id/search?keyword=serum%20vitamin%20c%20bright)")
+                        st.write("- [👜 Tas Fashion Wanita (Tokopedia)](https://www.tokopedia.com/search?st=product&q=tas%20wanita)")
+                        st.write("- [👠 High Heels Elegant (Shopee)](https://shopee.co.id/search?keyword=high%20heels%20elegant)")
+                else:
+                    st.warning("⚠ Gambar bukan domain gender.")
             else:
-                st.warning("⚠ Gambar bukan domain gender.")
-        else:
-            st.warning("⚠ Tidak ada objek terdeteksi.")
+                st.warning("⚠ Tidak ada objek terdeteksi.")
     else:
         st.info("📤 Silakan unggah gambar atau gunakan kamera.")
 
