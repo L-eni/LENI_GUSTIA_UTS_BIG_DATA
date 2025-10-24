@@ -439,15 +439,17 @@ if show_chart and len(st.session_state.history) > 0:
         colors = ["#64B5F6", "#4FC3F7", "#81D4FA"]
 
     # Buat plot
-    fig, ax = plt.subplots()
-    counts.plot(kind="bar", color=colors, ax=ax)
+    fig, ax = plt.subplots(figsize=(6, 4))  # ukuran lebih kecil
+counts.plot(kind="bar", color=colors, ax=ax)
 
-    ax.set_xlabel("Kategori Deteksi", fontsize=12)
-    ax.set_ylabel("Jumlah", fontsize=12)
-    ax.set_title("Statistik Deteksi (Gender & Alas Kaki)", fontsize=14, weight='bold')
-    ax.grid(axis="y", linestyle="--", alpha=0.4)
+ax.set_xlabel("Kategori Deteksi", fontsize=10)
+ax.set_ylabel("Jumlah", fontsize=10)
+ax.set_title("Statistik Deteksi (Gender & Alas Kaki)", fontsize=12, weight='bold')
+ax.grid(axis="y", linestyle="--", alpha=0.4)
 
-    st.pyplot(fig)
+fig.tight_layout()  # supaya layout rapi
+st.pyplot(fig)
+
 
 # =====================================================
 # EKSPOR DATA
