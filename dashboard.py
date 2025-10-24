@@ -263,13 +263,14 @@ if "history" not in st.session_state:
 if menu == "🧍 Deteksi Gender (YOLO)":
     st.subheader("🧍 Deteksi Gender (Men/Women)")
 
-    if uploaded_file:
-        img = Image.open(uploaded_file)
-        st.image(img, caption="Gambar yang Diupload", use_container_width=True)
-# --- CEK APakah gambar mengandung manusia dulu ---
-if contains_human(img, conf_threshold):
-    st.error("🚫 Gambar mengandung manusia, bukan domain alas kaki.")
-else:
+   if uploaded_file:
+    img = Image.open(uploaded_file)
+    st.image(img, caption="Gambar yang Diupload", use_container_width=True)
+
+    # --- CEK apakah gambar mengandung manusia dulu ---
+    if contains_human(img, conf_threshold):
+        st.error("🚫 Gambar mengandung manusia, bukan domain alas kaki.")
+    else:
         with st.spinner("🔎 Mendeteksi gender..."):
             start_time = time.time()
             annotated_img, detections = detect_objects(img, conf_threshold)
