@@ -1,5 +1,5 @@
 # =====================================================
-# 👟 Gender & Footwear AI Detection Dashboard (No Voice)
+# 👟 Gender & Footwear AI Detection Dashboard 
 # =====================================================
 import streamlit as st
 from ultralytics import YOLO
@@ -22,25 +22,132 @@ st.set_page_config(
 
 st.title("👟 Gender & Footwear Recognition App")
 st.markdown("""
-Aplikasi ini menggunakan *YOLOv8* untuk deteksi gender dan *CNN (TensorFlow)* untuk klasifikasi alas kaki.  
-Model bekerja pada domainnya masing-masing:
-- 🧍 *YOLO:* Men / Women  
-- 👞 *CNN:* Boot / Sandal / Shoe  
+Temukan kecocokan gaya kamu! 👟 Aplikasi ini bisa mengenali gender dan jenis alas kaki secara otomatis hanya dari satu gambar  
 """)
 
 # =====================================================
-# 🌙 DARK MODE OPSIONAL
+# 🎨 SIDEBAR - INFORMASI APLIKASI
 # =====================================================
-st.sidebar.markdown("### 🌙 Tema Tampilan")
-dark_mode = st.sidebar.checkbox("Aktifkan Dark Mode", value=False)
+with st.sidebar.expander("ℹ️ Tentang Aplikasi", expanded=True):
+    st.markdown("""
+    ## 👟 Gender & Footwear Recognition App  
+    Aplikasi ini dibuat sebagai **proyek analisis berbasis kecerdasan buatan (AI)**  
+    untuk mengenali **jenis kelamin (gender)** dan **jenis alas kaki (footwear)** dari gambar atau tangkapan kamera secara otomatis.
 
-if dark_mode:
+    ---
+    ### 🎯 Tujuan Aplikasi
+    Aplikasi ini bertujuan untuk:
+    - Menerapkan konsep **Computer Vision** secara interaktif dan praktis.  
+    - Memberikan pengalaman **deteksi visual real-time** bagi pengguna.  
+    - Menunjukkan bagaimana **AI dapat digunakan dalam klasifikasi objek sederhana.**
+
+    ---
+    ### 🔍 Fitur Utama:
+    - 🧍 **Deteksi Gender** → Men / Women  
+    - 👞 **Klasifikasi Alas Kaki** → Boot / Sandal / Sepatu  
+    - 💾 **Simpan Riwayat ke CSV** → untuk dokumentasi hasil deteksi  
+    - 📊 **Tampilkan Statistik Visual** → grafik hasil prediksi  
+
+    ---
+    ### 🧠 Tentang Teknologi
+    Aplikasi ini menggunakan kombinasi **deteksi objek** dan **klasifikasi citra**  
+    untuk menghasilkan hasil deteksi yang cepat dan akurat.
+
+    ---
+    Pilih mode, unggah gambar, dan lihat hasil deteksinya secara real-time! 🚀
+    """)
+
+    
+# =====================================================
+# 🌈 PILIHAN TEMA WARNA (MULTI THEME)
+# =====================================================
+# =====================================================
+# 🌈 PILIHAN TEMA WARNA (PASTEL STYLE)
+# =====================================================
+st.sidebar.markdown("### 🌈 Tema Tampilan")
+theme = st.sidebar.selectbox(
+    "Pilih Tema",
+    ["💡 Default", "🌙 Dark", "🌊 Ocean", "🌸 Pink", "🌲 Forest", "🌅 Sunset"]
+)
+
+# --- 🌙 DARK (soft gray-black) ---
+if theme == "🌙 Dark":
     st.markdown("""
         <style>
-        body { background-color: #0E1117; color: #FAFAFA; }
-        .stApp { background-color: #0E1117; }
+        body, .stApp { background-color: #1E1E1E !important; color: #EAEAEA !important; }
+        section[data-testid="stSidebar"] { background-color: #2B2B2B !important; color: #EAEAEA !important; }
+        .stButton>button { background-color: #444 !important; color: #FAFAFA !important; border-radius: 8px; }
+        .stButton>button:hover { background-color: #555 !important; transform: scale(1.03); }
+        a { color: #9CDCFE !important; }
+        a:hover { color: #C5E4FD !important; text-decoration: underline; }
         </style>
     """, unsafe_allow_html=True)
+
+# --- 🌊 OCEAN (pastel toska & biru muda) ---
+elif theme == "🌊 Ocean":
+    st.markdown("""
+        <style>
+        body, .stApp { background-color: #E0F7FA !important; color: #004D40 !important; }
+        section[data-testid="stSidebar"] { background-color: #B2EBF2 !important; color: #004D40 !important; }
+        .stButton>button { background-color: #80DEEA !important; color: #004D40 !important; border-radius: 8px; }
+        .stButton>button:hover { background-color: #4DD0E1 !important; }
+        a { color: #00838F !important; }
+        a:hover { color: #006064 !important; text-decoration: underline; }
+        </style>
+    """, unsafe_allow_html=True)
+
+# --- 🌸 PINK (soft blush pastel) ---
+elif theme == "🌸 Pink":
+    st.markdown("""
+        <style>
+        body, .stApp { background-color: #FFF0F6 !important; color: #4A0033 !important; }
+        section[data-testid="stSidebar"] { background-color: #FFD6E7 !important; color: #4A0033 !important; }
+        .stButton>button { background-color: #FFB6C1 !important; color: #4A0033 !important; border-radius: 8px; }
+        .stButton>button:hover { background-color: #FF9EBB !important; }
+        a { color: #C2185B !important; }
+        a:hover { color: #AD1457 !important; text-decoration: underline; }
+        </style>
+    """, unsafe_allow_html=True)
+
+# --- 🌲 FOREST (soft mint & hijau muda) ---
+elif theme == "🌲 Forest":
+    st.markdown("""
+        <style>
+        body, .stApp { background-color: #E8F5E9 !important; color: #1B5E20 !important; }
+        section[data-testid="stSidebar"] { background-color: #C8E6C9 !important; color: #1B5E20 !important; }
+        .stButton>button { background-color: #A5D6A7 !important; color: #1B5E20 !important; border-radius: 8px; }
+        .stButton>button:hover { background-color: #81C784 !important; }
+        a { color: #2E7D32 !important; }
+        a:hover { color: #1B5E20 !important; text-decoration: underline; }
+        </style>
+    """, unsafe_allow_html=True)
+
+# --- 🌅 SUNSET (peach pastel & coral lembut) ---
+elif theme == "🌅 Sunset":
+    st.markdown("""
+        <style>
+        body, .stApp { background-color: #FFF3E0 !important; color: #4E342E !important; }
+        section[data-testid="stSidebar"] { background-color: #FFE0B2 !important; color: #4E342E !important; }
+        .stButton>button { background-color: #FFCC80 !important; color: #4E342E !important; border-radius: 8px; }
+        .stButton>button:hover { background-color: #FFB74D !important; }
+        a { color: #E65100 !important; }
+        a:hover { color: #BF360C !important; text-decoration: underline; }
+        </style>
+    """, unsafe_allow_html=True)
+
+# --- 💡 DEFAULT (putih lembut & abu pastel) ---
+else:
+    st.markdown("""
+        <style>
+        body, .stApp { background-color: #FAFAFA !important; color: #0E1117 !important; }
+        section[data-testid="stSidebar"] { background-color: #FFFFFF !important; color: #0E1117 !important; }
+        .stButton>button { background-color: #AEDFF7 !important; color: #003366 !important; border-radius: 8px; }
+        .stButton>button:hover { background-color: #90CAF9 !important; }
+        a { color: #1E88E5 !important; }
+        a:hover { color: #1565C0 !important; text-decoration: underline; }
+        </style>
+    """, unsafe_allow_html=True)
+
 
 # =====================================================
 # LOAD MODELS
@@ -242,25 +349,66 @@ elif menu == "👞 Klasifikasi Alas Kaki (CNN)":
         st.info("📤 Silakan unggah gambar atau gunakan kamera.")
 
 # =====================================================
-# STATISTIK & EKSPOR
+# STATISTIK & EKSPOR (KUSTOM WARNA)
 # =====================================================
 st.markdown("---")
 st.markdown("### 📊 Statistik Deteksi Sementara")
+
 col1, col2 = st.columns(2)
 col1.metric("Total Deteksi Gender", st.session_state.detections["gender"])
 col2.metric("Total Deteksi Alas Kaki", st.session_state.detections["footwear"])
 
 if show_chart and len(st.session_state.history) > 0:
     df = pd.DataFrame(st.session_state.history)
-    st.bar_chart(df["Hasil"].value_counts())
 
+    import matplotlib.pyplot as plt
+
+    # Hitung frekuensi
+    counts = df["Hasil"].value_counts()
+
+    # Tentukan warna sesuai tema
+    if theme == "🌸 Pink":
+        colors = ["#FF80AB", "#F48FB1", "#EC407A"]
+    elif theme == "🌲 Forest":
+        colors = ["#66BB6A", "#81C784", "#A5D6A7"]
+    elif theme == "🌊 Ocean":
+        colors = ["#4DD0E1", "#26C6DA", "#00ACC1"]
+    elif theme == "🌅 Sunset":
+        colors = ["#FFB74D", "#FF8A65", "#F06292"]
+    elif theme == "🌙 Dark":
+        colors = ["#90CAF9", "#F48FB1", "#CE93D8"]
+    else:  # Default
+        colors = ["#64B5F6", "#4FC3F7", "#81D4FA"]
+
+    # Buat plot
+    fig, ax = plt.subplots()
+    counts.plot(kind="bar", color=colors, ax=ax)
+
+    ax.set_xlabel("Kategori Deteksi", fontsize=12)
+    ax.set_ylabel("Jumlah", fontsize=12)
+    ax.set_title("Statistik Deteksi (Gender & Alas Kaki)", fontsize=14, weight='bold')
+    ax.grid(axis="y", linestyle="--", alpha=0.4)
+
+    st.pyplot(fig)
+
+# =====================================================
+# EKSPOR DATA
+# =====================================================
 if export_enable and len(st.session_state.history) > 0:
-    df = pd.DataFrame(st.session_state.history)
     csv = df.to_csv(index=False).encode("utf-8")
     st.download_button("💾 Unduh Riwayat Deteksi (CSV)", data=csv, file_name="riwayat_deteksi.csv", mime="text/csv")
+
 
 # =====================================================
 # FOOTER
 # =====================================================
 st.markdown("<hr>", unsafe_allow_html=True)
-st.caption("© 2025 Smart AI Vision — Leni Gustia 👩‍💻 | YOLOv8 + TensorFlow CNN + Dark Mode + Smart Export")
+st.markdown("""
+<div style='text-align: center; font-size: 14px;'>
+    © 2025 <b>Smart AI Vision</b> — Created by <b>Leni Gustia 👩‍💻</b><br>
+    <a href='https://www.linkedin.com/in/leni-gustia-405a40294/' target='_blank' style='text-decoration: none; color: #008B8B; font-weight: bold;'>
+        🔗 LinkedIn: leni-gustia-405a40294
+    </a><br>
+    Built with ❤️ using YOLOv8 + TensorFlow CNN + Streamlit
+</div>
+""", unsafe_allow_html=True)
