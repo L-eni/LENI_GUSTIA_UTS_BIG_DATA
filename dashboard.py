@@ -32,8 +32,8 @@ Temukan kecocokan gaya kamu! 👟 Aplikasi ini bisa mengenali gender dan jenis a
 with st.sidebar.expander("ℹ️ Tentang Aplikasi", expanded=True):
     st.markdown("""
     ## 👟 Gender & Footwear Recognition App  
-    Aplikasi ini dibuat sebagai **proyek analisis berbasis kecerdasan buatan (AI)**  
-    untuk mengenali **jenis kelamin (gender)** dan **jenis alas kaki (footwear)** dari gambar atau tangkapan kamera secara otomatis.
+    Aplikasi ini dibuat untuk mengenali **jenis kelamin (gender) dengan model YOLO** dan 
+    **jenis alas kaki (footwear) dengan model CNN** dari gambar atau tangkapan kamera secara otomatis.
 
     ---
     ### 🎯 Tujuan Aplikasi
@@ -44,10 +44,10 @@ with st.sidebar.expander("ℹ️ Tentang Aplikasi", expanded=True):
 
     ---
     ### 🔍 Fitur Utama:
-    - 🧍 **Deteksi Gender** → Men / Women  
-    - 👞 **Klasifikasi Alas Kaki** → Boot / Sandal / Sepatu  
-    - 💾 **Simpan Riwayat ke CSV** → untuk dokumentasi hasil deteksi  
-    - 📊 **Tampilkan Statistik Visual** → grafik hasil prediksi  
+    - 🧍 Deteksi Gender → Men / Women  
+    - 👞 Klasifikasi Alas Kaki → Boot / Sandal / Sepatu  
+    - 💾 Simpan Riwayat ke CSV → untuk dokumentasi hasil deteksi  
+    - 📊 Tampilkan Statistik Visual → grafik hasil prediksi  
     """)
 
 # =====================================================
